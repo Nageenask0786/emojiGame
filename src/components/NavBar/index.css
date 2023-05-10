@@ -1,0 +1,33 @@
+.navbar {
+  height: 10vh;
+  background-color: #9796f0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.score-card {
+  display: flex;
+  flex-direction: column;
+}
+.score {
+  font-family: 'Roboto';
+  color: #ffffff;
+  font-weight: 1000;
+  font-size: 15px;
+}
+.top-score {
+  font-family: 'Roboto';
+  color: #ffffff;
+  font-weight: 1000;
+  font-size: 15px;
+}
+.text {
+  font-family: 'Roboto';
+  color: #ffffff;
+  font-weight: 1000;
+  font-size: 20px;
+}
+.card {
+  display: flex;
+  align-items: center;
+}
