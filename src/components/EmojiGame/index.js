@@ -4,6 +4,8 @@ import EmojiCard from '../EmojiCard'
 
 import NavBar from '../NavBar'
 
+import WinOrLoseCard from '../WinOrLoseCard'
+
 import './index.css'
 
 /* 
@@ -19,134 +21,90 @@ const shuffledEmojisList = () => {
 */
 
 // Write your code here.
-const emojisList = [
-  {
-    id: 0,
-    emojiName: 'Face with stuck out tongue',
-    emojiUrl:
-      'https://assets.ccbp.in/frontend/react-js/face-with-stuck-out-tongue-img.png',
-    clicked: false,
-  },
-  {
-    id: 1,
-    emojiName: 'Face with head bandage',
-    emojiUrl:
-      'https://assets.ccbp.in/frontend/react-js/face-with-head-bandage-img.png',
-    clicked: false,
-  },
-  {
-    id: 2,
-    emojiName: 'Face with hugs',
-    emojiUrl: 'https://assets.ccbp.in/frontend/react-js/face-with-hugs-img.png',
-    clicked: false,
-  },
-  {
-    id: 3,
-    emojiName: 'Face with laughing',
-    emojiUrl:
-      'https://assets.ccbp.in/frontend/react-js/face-with-laughing-img.png',
-    clicked: false,
-  },
-  {
-    id: 4,
-    emojiName: 'Laughing face with hand in front of mouth',
-    emojiUrl:
-      'https://assets.ccbp.in/frontend/react-js/face-with-laughing-with-hand-infront-mouth-img.png',
-    clicked: false,
-  },
-  {
-    id: 5,
-    emojiName: 'Face with mask',
-    emojiUrl: 'https://assets.ccbp.in/frontend/react-js/face-with-mask-img.png',
-    clicked: false,
-  },
-  {
-    id: 6,
-    emojiName: 'Face with silence',
-    emojiUrl:
-      'https://assets.ccbp.in/frontend/react-js/face-with-silence-img.png',
-    clicked: false,
-  },
-  {
-    id: 7,
-    emojiName: 'Face with stuck out tongue and winked eye',
-    emojiUrl:
-      'https://assets.ccbp.in/frontend/react-js/face-with-stuck-out-tongue-and-winking-eye-img.png',
-    clicked: false,
-  },
-  {
-    id: 8,
-    emojiName: 'Grinning face with sweat',
-    emojiUrl:
-      'https://assets.ccbp.in/frontend/react-js/grinning-face-with-sweat-img.png',
-    clicked: false,
-  },
-  {
-    id: 9,
-    emojiName: 'Smiling face with heart eyes',
-    emojiUrl:
-      'https://assets.ccbp.in/frontend/react-js/smiling-face-with-heart-eyes-img.png',
-    clicked: false,
-  },
-  {
-    id: 10,
-    emojiName: 'Grinning face',
-    emojiUrl: 'https://assets.ccbp.in/frontend/react-js/grinning-face-img.png',
-    clicked: false,
-  },
-  {
-    id: 11,
-    emojiName: 'Smiling face with star eyes',
-    emojiUrl:
-      'https://assets.ccbp.in/frontend/react-js/smiling-face-with-star-eyes-img.png',
-    clicked: false,
-  },
-]
 
 class EmojiGame extends Component {
-  state = {score: 0, topScore: 0, cards: emojisList}
+  state = {topScore: 0, clickedEmojis: [], isGameEnd: false}
 
-  clickCount = id => {
-    const {cards} = this.state
-    cards.find(x => {
-      if (x.id === id) {
-        this.setState(prevState => ({score: prevState.score + 1}))
-        cards.sort(() => Math.random() - 0.5)
-      } else {
-        this.endGame()
-      }
-
-      return true
-    })
+  shuffleEmojis = () => {
+    const {emojisList} = this.props
+    return emojisList.sort(() => Math.random() - 0.5)
   }
 
-  endGame = () => {
-    const {score, topScore} = this.state
-    if (score > topScore) {
-      this.setState({topScore: score})
+  onClickEmoji = id => {
+    const {emojisList} = this.props
+    const {clickedEmojis} = this.state
+    const isPresent = clickedEmojis.includes(id)
+    if (isPresent) {
+      this.finishGameAndSetTopScore(clickedEmojis.length)
     } else {
-      this.setState({score: 0})
+      if (emojisList.length - 1 === clickedEmojis.length) {
+        this.finishGameAndSetTopScore(emojisList.length)
+      }
+      this.setState(prevState => ({
+        clickedEmojis: [...prevState.clickedEmojis, id],
+      }))
     }
-    return true
+  }
+
+  finishGameAndSetTopScore = newScore => {
+    const {topScore} = this.state
+    if (newScore > topScore) {
+      this.setState({topScore: newScore})
+    } else {
+      this.setisGameEnd(true)
+    }
+  }
+
+  restartGame = () => {
+    this.setState({clickedEmojis: []})
+  }
+
+  setisGameEnd = value => {
+    this.setState({isGameEnd: value})
+  }
+
+  renderWinOrLoseCard = () => {
+    const emojisList = this.props
+    const clickedEmojis = this.state
+    const isWon = emojisList.length === clickedEmojis.length
+    return (
+      <WinOrLoseCard
+        isWon={isWon}
+        score={clickedEmojis.length}
+        onClickPlayAgain={this.restartGame}
+      />
+    )
+  }
+
+  renderEmojiCard = () => {
+    const shuffledemojisList = this.shuffleEmojis()
+    return (
+      <ul className="games">
+        {shuffledemojisList.map(each => (
+          <EmojiCard
+            key={each.id}
+            emojiDetails={each}
+            onClickEmoji={this.onClickEmoji}
+          />
+        ))}
+      </ul>
+    )
   }
 
   render() {
-    const {score, topScore} = this.state
+    const {clickedEmojis, topScore, isGameEnd} = this.state
+    const {currentscore} = clickedEmojis.length
     return (
       <div>
         <div>
-          <NavBar score={score} topScore={topScore} />
+          <NavBar
+            score={currentscore}
+            topScore={topScore}
+            isGameEnd={isGameEnd}
+          />
         </div>
         <div className="emoji-game">
-          <ul className="games">
-            {emojisList.map(each => (
-              <EmojiCard
-                emojiDetails={each}
-                key={each.id}
-                clickCount={this.clickCount}
-              />
-            ))}
-          </ul>
+          {isGameEnd ? this.renderWinOrLoseCard() : this.renderEmojiCard()}
         </div>
       </div>
     )

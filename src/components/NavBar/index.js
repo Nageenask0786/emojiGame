@@ -1,7 +1,10 @@
 import './index.css'
 
 const NavBar = props => {
-  const {score, topScore} = props
+  const {score, topScore, isGameEnd} = props
+  if (isGameEnd) {
+    return null
+  }
   return (
     <div className="navbar">
       <div className="card">
