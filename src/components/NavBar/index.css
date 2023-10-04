@@ -7,13 +7,30 @@
 }
 .score-card {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.scores {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 .score {
+  font-family: 'Roboto';
+  margin-right: 30px;
+  color: #ffffff;
+  font-weight: 1000;
+  font-size: 15px;
+}
+.title {
   font-family: 'Roboto';
   color: #ffffff;
   font-weight: 1000;
   font-size: 15px;
+}
+.emoji-logo {
+  height: 30px;
+  width: 30px;
 }
 .top-score {
   font-family: 'Roboto';

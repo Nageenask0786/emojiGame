@@ -6,6 +6,9 @@
 .emoji-game {
   background-image: linear-gradient(#6a59ff, #9796f0, #fbc7d4);
   min-height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .games {
   display: flex;
